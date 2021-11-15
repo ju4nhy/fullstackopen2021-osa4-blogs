@@ -3,7 +3,7 @@ const palindrome = (string) => {
       .split('')
       .reverse()
       .join('')
-  }
+}
 
 const average = array => {
   const reducer = (sum, item) => {
@@ -14,8 +14,8 @@ const average = array => {
     : array.reduce(reducer, 0) / array.length
 }
   
-  module.exports = {
-    palindrome,
-    average,
-  }
+module.exports = {
+  palindrome,
+  average,
+}
 

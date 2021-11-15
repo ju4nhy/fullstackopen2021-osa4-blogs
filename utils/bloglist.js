@@ -1,4 +1,18 @@
 /* Blog lists for testing purposes */
+const initialBlogs = [
+  {
+    title: "Testiblog A",
+    author: "Kimmo Tim",
+    url: "https://www.blogggs.fi",
+    likes: 10
+  },
+  {
+    title: "Testiblog B",
+    author: "Jaakko Pin",
+    url: "https://www.blogggss.fi/231",
+    likes: 2
+  }
+]
 
 const listWithOneBlog = [
     {
@@ -64,5 +78,6 @@ const blogs = [
 
   module.exports = {
     listWithOneBlog,
-    blogs
+    blogs,
+    initialBlogs
   }
