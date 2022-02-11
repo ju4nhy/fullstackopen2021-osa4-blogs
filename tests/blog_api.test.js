@@ -155,7 +155,7 @@ describe('when updating a blog', () => {
       title: blogToUpdate.title,
       author: blogToUpdate.author,
       url: blogToUpdate.url,
-      likes: blogToUpdate['likes'] = 1000,
+      likes: 1000,
       id: blogToUpdate.id
     }
 

@@ -1,4 +1,6 @@
-var _ = require('lodash');
+  var _ = require('lodash');
+
+  /* Tehtävät 4.1 - 4.7 */
 
   // just for testing purposes...
   const dummy = (blogs) => {

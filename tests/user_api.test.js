@@ -41,8 +41,7 @@ describe('When there is one user at db', () => {
       expect(usernames).toContain(newUser.username)
     })
 
-     // Tästä eteenpäin ei toimi...
-     test('Creation fails with proper statuscode and message if username taken', async () => {
+    test('Creation fails with proper statuscode and message if username taken', async () => {
       const usersAtStart = await helper.usersInDb()
 
       const newUser = {
@@ -50,18 +49,41 @@ describe('When there is one user at db', () => {
           name: 'Superuser',
           password: '0000',
       }
-  
+
       const result = await api
           .post('/api/users')
           .send(newUser)
           .expect(400)
           .expect('Content-Type', /application\/json/)
-  
+
           expect(result.body.error).toContain('`username` to be unique')
-  
+
           const usersAtEnd = await helper.usersInDb()
           expect(usersAtEnd).toHaveLength(usersAtStart.length)
-      })
+    })
+
+    test('Creation fails with proper statuscode and message if username is too short', async () => {
+      const usersAtStart = await helper.usersInDb()
+
+      const newUser = {
+          username: 'TU',
+          name: 'Test User',
+          password: '12345',
+      }
+
+      const result = await api
+          .post('/api/users')
+          .send(newUser)
+          .expect(400)
+          .expect('Content-Type', /application\/json/)
+
+          expect(result.body.error).toContain(
+            'is shorter than the minimum allowed length'
+          );
+
+          const usersAtEnd = await helper.usersInDb()
+          expect(usersAtEnd).toHaveLength(usersAtStart.length)
+    })
 })
 
 afterAll(() => {
