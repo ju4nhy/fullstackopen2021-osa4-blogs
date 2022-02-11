@@ -1,8 +1,10 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
 const helper = require('../utils/test_helper')
 const app = require('../app')
 const api = supertest(app)
+const User = require('../models/user')
 const Blog = require('../models/blog')
 
 const initialBlogs = [
@@ -64,7 +66,7 @@ describe('when adding a blog entry', () => {
 
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(initialBlogs.length + 1)
-      console.log('a valid blog can be added', blogsAtEnd)
+      // console.log('a valid blog can be added', blogsAtEnd)
 
       const blogTitles = blogsAtEnd.map(blog => blog.title)
       expect(blogTitles).toContain('Testiblog C')
@@ -86,7 +88,7 @@ describe('when adding a blog entry', () => {
       const blogsAtEnd = await helper.blogsInDb()
       const blogLikes = blogsAtEnd.map(blog => blog.likes)
       expect(blogLikes).toContain(0)
-      console.log('if likes field is has no value, set its value to 0', blogsAtEnd)
+      // console.log('if likes field is has no value, set its value to 0', blogsAtEnd)
   })
 
   test('blog without title is not added', async () => {
@@ -103,7 +105,7 @@ describe('when adding a blog entry', () => {
       .expect(400) 
     
     const blogsAtEnd = await helper.blogsInDb()
-    console.log('blog without url is not added', blogsAtEnd)
+    // console.log('blog without url is not added', blogsAtEnd)
   })
 
   test('blog without url is not added', async () => {
@@ -120,10 +122,11 @@ describe('when adding a blog entry', () => {
       .expect(400)
   
     const blogsAtEnd = await helper.blogsInDb()
-    console.log('blog without title is not added', blogsAtEnd)
+    // console.log('blog without title is not added', blogsAtEnd)
   })
 })
 
+// Tehtävä 4.13
 describe('when deleting a blog', () => {
   test('a blog can be deleted', async () => {
     const blogsAtStart = await helper.blogsInDb()
@@ -138,10 +141,11 @@ describe('when deleting a blog', () => {
   
     const blogTitles = blogsAtEnd.map(blog => blog.title)
     expect(blogTitles).not.toContain(blogToDelete.title)
-    console.log('when deleting a blog', blogsAtEnd)
+    // console.log('when deleting a blog', blogsAtEnd)
   })
 })
 
+// Tehtävä 4.14
 describe('when updating a blog', () => {
   test('a blog can be updated', async () => {
     const blogsAtStart = await helper.blogsInDb()
@@ -164,7 +168,7 @@ describe('when updating a blog', () => {
     const blogLikes = blogsAtEnd.map(blog => blog.likes)
 
     expect(blogLikes).toContain(updatedBlog.likes)
-    console.log('when updating a blog', blogsAtEnd)
+    // console.log('when updating a blog', blogsAtEnd)
   })
 })
 
