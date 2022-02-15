@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs/
 Content-Type: application/json
 
 {
-    "title": "Matka maailmaan",
-    "author": "Tatu Itkonen",
-    "url": "http://www.matkamaailmaan.fifi",
+    "title": "Blogi",
+    "author": "Bloggeri",
+    "url": "http://www.blogblog.com",
     "likes": 26
 }

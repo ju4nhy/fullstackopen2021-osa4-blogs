@@ -49,6 +49,11 @@ describe('when there is some blogs saved', () => {
 
 // Tehtävät 4.10, 4.11, 4.12
 describe('when adding a blog entry', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(initialBlogs)
+  })
+
   test('a valid blog can be added', async () => {
     
       const newBlog = {
@@ -66,7 +71,7 @@ describe('when adding a blog entry', () => {
 
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(initialBlogs.length + 1)
-     console.log('a valid blog can be added', blogsAtEnd)
+      console.log('a valid blog can be added', blogsAtEnd)
 
       const blogTitles = blogsAtEnd.map(blog => blog.title)
       expect(blogTitles).toContain('Testiblog C')
@@ -88,7 +93,7 @@ describe('when adding a blog entry', () => {
       const blogsAtEnd = await helper.blogsInDb()
       const blogLikes = blogsAtEnd.map(blog => blog.likes)
       expect(blogLikes).toContain(0)
-      // console.log('if likes field is has no value, set its value to 0', blogsAtEnd)
+      console.log('if likes field is has no value, set its value to 0', blogsAtEnd)
   })
 
   test('blog without title is not added', async () => {
@@ -105,6 +110,7 @@ describe('when adding a blog entry', () => {
       .expect(400) 
     
     const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length)
     // console.log('blog without url is not added', blogsAtEnd)
   })
 
@@ -122,12 +128,17 @@ describe('when adding a blog entry', () => {
       .expect(400)
   
     const blogsAtEnd = await helper.blogsInDb()
-    // console.log('blog without title is not added', blogsAtEnd)
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length)
   })
 })
 
 // Tehtävä 4.13
 describe('when deleting a blog', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(initialBlogs)
+  })
+
   test('a blog can be deleted', async () => {
     const blogsAtStart = await helper.blogsInDb()
     console.log(blogsAtStart)

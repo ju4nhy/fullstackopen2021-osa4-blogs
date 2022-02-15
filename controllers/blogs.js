@@ -3,8 +3,11 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 blogRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
-  response.json(blogs.map(blog => blog.toJSON()))
+ // const blogs = await Blog.find({})
+ // response.json(blogs.map(blog => blog.toJSON()))
+
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })  
+  response.json(blogs)
 })
 
 blogRouter.get('/:id', async (request, response, next) => {
@@ -19,31 +22,35 @@ blogRouter.get('/:id', async (request, response, next) => {
 blogRouter.post('/', async (request, response, next) => {
     const body = request.body
 
-    // UUSI
     const user = await User.findById(body.userId)
+    console.log(user)
 
     const blog = new Blog({
         title: body.title,
         author: body.author,
         url: body.url,
-        likes: body.likes,
+        likes: body.likes ? body.likes : 0,
         user: user._id
     })
 
-    if (blog.likes == undefined || null) {
+    if ( !blog.title || !blog.url ) {
+			return response.status( 400 ).json({ error: 'Blog title or url is missing' });
+		}
+
+    const savedBlog = await blog.save()
+    user.blogs = user.blogs.concat(savedBlog._id)
+    await user.save()
+    response.json(savedBlog)
+    // response.json(savedBlog.toJSON())
+
+      // user.blogs = user.blogs.concat(savedBlog._id)
+   // await user.save()
+
+
+    /*if (blog.likes == undefined || null) {
       blog['likes'] = 0
     }
-
-    if (!blog.title || !blog.url) {
-      response.status(400).end()
-    } else {
-      const savedBlog = await blog.save()
-
-      user.blogs = user.blogs.concat(savedBlog._id)
-      await user.save()
-
-      response.json(savedBlog.toJSON())
-    }
+    */
 })
 
 blogRouter.put('/:id', async (request, response, next) => {

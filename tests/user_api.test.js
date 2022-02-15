@@ -55,7 +55,29 @@ describe('When there is one user at db', () => {
           .expect(400)
           .expect('Content-Type', /application\/json/)
 
-      expect(result.body.error).toContain('`username` to be unique')
+      expect(result.body.error).toContain('username must be unique')
+
+      const usersAtEnd = await helper.usersInDb()
+      expect(usersAtEnd).toHaveLength(usersAtStart.length)
+    })
+
+    test('Creation fails with proper statuscode and message if username is missing', async () => {
+      const usersAtStart = await helper.usersInDb()
+
+      const newUser = {
+          name: 'Test User',
+          password: '12345',
+      }
+
+      const result = await api
+          .post('/api/users')
+          .send(newUser)
+          .expect(400)
+          .expect('Content-Type', /application\/json/)
+
+      expect(result.body.error).toContain(
+        '`username` is required'
+      );
 
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
@@ -76,10 +98,47 @@ describe('When there is one user at db', () => {
           .expect(400)
           .expect('Content-Type', /application\/json/)
 
-      expect(result.body.error).toContain(
-        'is shorter than the minimum allowed length'
-      );
+      expect(result.body.error).toContain('is shorter than the minimum allowed length');
 
+      const usersAtEnd = await helper.usersInDb()
+      expect(usersAtEnd).toHaveLength(usersAtStart.length)
+    })
+
+    test('Creation fails with proper statuscode and message if password is missing', async () => {
+      const usersAtStart = await helper.usersInDb()
+
+      const newUser = {
+          username: 'Test User',
+          name: 'Test User'
+      }
+
+      const result = await api
+          .post('/api/users')
+          .send(newUser)
+          .expect(400)
+          .expect('Content-Type', /application\/json/)
+
+      expect(result.body.error).toContain('Password is missing or it is too short');
+      const usersAtEnd = await helper.usersInDb()
+      expect(usersAtEnd).toHaveLength(usersAtStart.length)
+    })
+
+    test('Creation fails with proper statuscode and message if password is too short', async () => {
+      const usersAtStart = await helper.usersInDb()
+
+      const newUser = {
+          username: 'Test User',
+          name: 'Test User',
+          password: '12',
+      }
+
+      const result = await api
+          .post('/api/users')
+          .send(newUser)
+          .expect(400)
+          .expect('Content-Type', /application\/json/)
+
+      expect(result.body.error).toContain('Password is missing or it is too short');
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
     })
