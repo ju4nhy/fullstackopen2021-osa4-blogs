@@ -27,7 +27,7 @@ blogRouter.post('/', async (request, response, next) => {
         author: body.author,
         url: body.url,
         likes: body.likes,
-    //    user: user._id
+        user: user._id
     })
 
     if (blog.likes == undefined || null) {
@@ -39,8 +39,8 @@ blogRouter.post('/', async (request, response, next) => {
     } else {
       const savedBlog = await blog.save()
 
-      //   user.blogs = user.blogs.concat(savedBlog._id)
-    //   await user.save()
+      user.blogs = user.blogs.concat(savedBlog._id)
+      await user.save()
 
       response.json(savedBlog.toJSON())
     }

@@ -7,7 +7,6 @@ const api = supertest(app)
 const User = require('../models/user')
 const Blog = require('../models/blog')
 
-
 // Tehtävät 4.15 -
 describe('When there is one user at db', () => {
     beforeEach(async () => {
@@ -56,10 +55,10 @@ describe('When there is one user at db', () => {
           .expect(400)
           .expect('Content-Type', /application\/json/)
 
-          expect(result.body.error).toContain('`username` to be unique')
+      expect(result.body.error).toContain('`username` to be unique')
 
-          const usersAtEnd = await helper.usersInDb()
-          expect(usersAtEnd).toHaveLength(usersAtStart.length)
+      const usersAtEnd = await helper.usersInDb()
+      expect(usersAtEnd).toHaveLength(usersAtStart.length)
     })
 
     test('Creation fails with proper statuscode and message if username is too short', async () => {
@@ -77,12 +76,12 @@ describe('When there is one user at db', () => {
           .expect(400)
           .expect('Content-Type', /application\/json/)
 
-          expect(result.body.error).toContain(
-            'is shorter than the minimum allowed length'
-          );
+      expect(result.body.error).toContain(
+        'is shorter than the minimum allowed length'
+      );
 
-          const usersAtEnd = await helper.usersInDb()
-          expect(usersAtEnd).toHaveLength(usersAtStart.length)
+      const usersAtEnd = await helper.usersInDb()
+      expect(usersAtEnd).toHaveLength(usersAtStart.length)
     })
 })
 

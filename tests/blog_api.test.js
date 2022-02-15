@@ -50,12 +50,12 @@ describe('when there is some blogs saved', () => {
 // Tehtävät 4.10, 4.11, 4.12
 describe('when adding a blog entry', () => {
   test('a valid blog can be added', async () => {
-      // Valid blog
+    
       const newBlog = {
           title: 'Testiblog C',
           author: 'Trisha Roberts',
           url: 'https://www.sammycomcom.com/',
-          likes: 7
+          likes: 7,
       }
 
       await api
@@ -66,7 +66,7 @@ describe('when adding a blog entry', () => {
 
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(initialBlogs.length + 1)
-      // console.log('a valid blog can be added', blogsAtEnd)
+     console.log('a valid blog can be added', blogsAtEnd)
 
       const blogTitles = blogsAtEnd.map(blog => blog.title)
       expect(blogTitles).toContain('Testiblog C')
@@ -130,6 +130,7 @@ describe('when adding a blog entry', () => {
 describe('when deleting a blog', () => {
   test('a blog can be deleted', async () => {
     const blogsAtStart = await helper.blogsInDb()
+    console.log(blogsAtStart)
     const blogToDelete = blogsAtStart[0]
   
     await api 
@@ -137,11 +138,11 @@ describe('when deleting a blog', () => {
       .expect(204)
   
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(3)
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1)
   
     const blogTitles = blogsAtEnd.map(blog => blog.title)
     expect(blogTitles).not.toContain(blogToDelete.title)
-    // console.log('when deleting a blog', blogsAtEnd)
+    console.log('when deleting a blog', blogsAtEnd)
   })
 })
 
