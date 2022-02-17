@@ -5,7 +5,6 @@ const helper = require('../utils/test_helper')
 const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
-const Blog = require('../models/blog')
 
 // Tehtävät 4.15 -
 describe('When there is one user at db', () => {

@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs/
-Content-Type: application/json
+Content-Type: application/json 
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1YW5oeSIsImlkIjoiNjIwZTI0YjFlZjRiNjNmY2MyMWVmNmRhIiwiaWF0IjoxNjQ1MDk0MDg4LCJleHAiOjE2NDUwOTc2ODh9.HeljhXDj32n9yws2GlCkj-Adg7Zm4XY6PyyxlxtOoAo
 
-{
-    "title": "Blogi",
-    "author": "Bloggeri",
-    "url": "http://www.blogblog.com",
-    "likes": 26
+{ 
+    "title": "Travelling 2: The Second Part",
+    "author": "juanhy",
+    "url": "http://www.travelbloooog2.fi"
 }

@@ -1,13 +1,22 @@
+const jwt = require('jsonwebtoken')
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
-blogRouter.get('/', async (request, response) => {
- // const blogs = await Blog.find({})
- // response.json(blogs.map(blog => blog.toJSON()))
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
+blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })  
   response.json(blogs)
+   // const blogs = await Blog.find({})
+   // response.json(blogs.map(blog => blog.toJSON()))
+   // response.json(blogs.map((blog) => blog.toJSON()))
 })
 
 blogRouter.get('/:id', async (request, response, next) => {
@@ -20,10 +29,16 @@ blogRouter.get('/:id', async (request, response, next) => {
 })
 
 blogRouter.post('/', async (request, response, next) => {
+  
     const body = request.body
 
-    const user = await User.findById(body.userId)
-    console.log(user)
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+    const user = await User.findById(decodedToken.id)
 
     const blog = new Blog({
         title: body.title,
@@ -33,6 +48,9 @@ blogRouter.post('/', async (request, response, next) => {
         user: user._id
     })
 
+    console.log('1', blog.user)
+    console.log('2', user._id)
+
     if ( !blog.title || !blog.url ) {
 			return response.status( 400 ).json({ error: 'Blog title or url is missing' });
 		}
@@ -40,17 +58,7 @@ blogRouter.post('/', async (request, response, next) => {
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
-    response.json(savedBlog)
-    // response.json(savedBlog.toJSON())
-
-      // user.blogs = user.blogs.concat(savedBlog._id)
-   // await user.save()
-
-
-    /*if (blog.likes == undefined || null) {
-      blog['likes'] = 0
-    }
-    */
+    response.json(savedBlog.toJSON())
 })
 
 blogRouter.put('/:id', async (request, response, next) => {

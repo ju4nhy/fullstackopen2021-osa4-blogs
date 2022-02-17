@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator')
+// const uniqueValidator = require('mongoose-unique-validator')
+// MongooseUniqueValidator doesnt work!
 
 const userSchema = mongoose.Schema({
   username: {
@@ -22,7 +23,7 @@ const userSchema = mongoose.Schema({
   ],
 })
 
-userSchema.plugin(uniqueValidator)
+// userSchema.plugin(uniqueValidator)
 
 userSchema.set('toJSON', {
   transform: (document, returnedObject) => {
