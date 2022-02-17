@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json 
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1YW5oeSIsImlkIjoiNjIwZTI0YjFlZjRiNjNmY2MyMWVmNmRhIiwiaWF0IjoxNjQ1MDk0MDg4LCJleHAiOjE2NDUwOTc2ODh9.HeljhXDj32n9yws2GlCkj-Adg7Zm4XY6PyyxlxtOoAo
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1YW5oeSIsImlkIjoiNjIwZTQzZjI2NTdmYzNlM2IzODgzYjFlIiwiaWF0IjoxNjQ1MTAyMDcyLCJleHAiOjE2NDUxMDU2NzJ9.GTSEiLXvwmmbETb33XzbZQdKVv7MzjhQ7m5jV2lVPzo
 
 { 
-    "title": "Travelling 2: The Second Part",
+    "title": "This can be deleted",
     "author": "juanhy",
     "url": "http://www.travelbloooog2.fi"
 }
