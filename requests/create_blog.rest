@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json 
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1YW5oeSIsImlkIjoiNjIwZTQzZjI2NTdmYzNlM2IzODgzYjFlIiwiaWF0IjoxNjQ1MTAyMDcyLCJleHAiOjE2NDUxMDU2NzJ9.GTSEiLXvwmmbETb33XzbZQdKVv7MzjhQ7m5jV2lVPzo
+Authorization: bearer hbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1YW5oeSIsImlkIjoiNjIwZjgyYjYxMGNhZmYzYjE5ZDk0ZWEwIiwiaWF0IjoxNjQ1MTg1MDUzLCJleHAiOjE2NDUxODg2NTN9.Z5uM2q2y3am8eWmHqzwwJUK0T9optwFw1vNTGhKdQbY
 
 { 
-    "title": "This can be deleted",
+    "title": "This can be deleted 2",
     "author": "juanhy",
     "url": "http://www.travelbloooog2.fi"
 }
