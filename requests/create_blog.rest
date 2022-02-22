@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json 
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1YW5oeSIsImlkIjoiNjIxMzk4ZDFlNTMzNDM4NWRhMzNhYTM1IiwiaWF0IjoxNjQ1NDUxNDc3LCJleHAiOjE2NDU0NTUwNzd9.N3ynV4rxx465-HUELifdb-Wwhsax86H9A5pKTxrCqjg
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1YW5oeSIsImlkIjoiNjIxNGMzNDMxMzVkZDJjM2Y5NTY3YjAzIiwiaWF0IjoxNjQ1NTI3ODgyLCJleHAiOjE2NDU1MzE0ODJ9._twPqznj-0T0OY32l5WTubOwSynB26EeixwwrEaWigw
 
 { 
     "title": "This can be deleted 2",

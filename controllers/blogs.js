@@ -47,7 +47,7 @@ blogRouter.post('/', middleware.userExtractor, async (request, response, next) =
 })
 
 blogRouter.delete('/:id', middleware.userExtractor, async (request, response, next) => {
-   // const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    // const decodedToken = jwt.verify(request.token, process.env.SECRET)
     const user = request.user
 
     if (!request.token || !user.id) {
@@ -57,13 +57,12 @@ blogRouter.delete('/:id', middleware.userExtractor, async (request, response, ne
     const blogToDelete = await Blog.findById(request.params.id)
 
     if (blogToDelete.user.toString() !== user.id.toString()) {
-      response.status(401).json({ error: 'You do not have permission to delete this blog' })
+      return response.status(401).json({ error: 'You do not have permission to delete this blog' })
     } 
 
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
 })
-
 
 blogRouter.put('/:id', async (request, response, next) => {
   const body = request.body

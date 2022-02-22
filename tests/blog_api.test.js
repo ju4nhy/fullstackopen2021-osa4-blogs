@@ -6,6 +6,9 @@ const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
 const Blog = require('../models/blog')
+const { post } = require('../controllers/users')
+
+let token = null
 
 const initialBlogs = [
     {
@@ -22,15 +25,13 @@ const initialBlogs = [
     }
 ]
 
-let token = null
+beforeEach(async () => {
+  await Blog.deleteMany({})
+  await Blog.insertMany(initialBlogs)
+})
 
 // Tehtävät 4.8 ja 4.9
 describe('when there is some blogs saved', () => {
-  beforeEach(async () => {
-    await Blog.deleteMany({})
-    await Blog.insertMany(initialBlogs)
-  })
-
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -52,9 +53,6 @@ describe('when there is some blogs saved', () => {
 // Tehtävät 4.10, 4.11, 4.12
 describe('when adding a blog entry', () => {
   beforeEach(async () => {
-    await Blog.deleteMany({})
-    await Blog.insertMany(initialBlogs)
-
     const tester = {
       username: 'tester',
       name: 'Test User',
@@ -76,7 +74,7 @@ describe('when adding a blog entry', () => {
   })
 
   test('a valid blog can be added', async () => {
-      const newBlog = {
+      const testBlog = {
           title: 'Testiblog C',
           author: 'Trisha Roberts',
           url: 'https://www.sammycomcom.com/',
@@ -86,7 +84,7 @@ describe('when adding a blog entry', () => {
       await api
         .post('/api/blogs')
         .set('Authorization', `Bearer ${token}`)
-        .send(newBlog)
+        .send(testBlog)
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
@@ -99,7 +97,7 @@ describe('when adding a blog entry', () => {
 
   test('if likes field is has no value, set its value to 0', async () => {
     // Blog without likes
-    const newBlog = {
+    const testBlog = {
       title: 'Testiblog D',
       author: 'Andrew Reed',
       url: 'https://www.bobbybombom.com/'
@@ -108,7 +106,7 @@ describe('when adding a blog entry', () => {
     await api
       .post('/api/blogs')
       .set('Authorization', `Bearer ${token}`)
-      .send(newBlog)
+      .send(testBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
@@ -118,7 +116,7 @@ describe('when adding a blog entry', () => {
   })
 
   test('blog without title is not added', async () => {
-    const newBlog = {
+    const testBlog = {
       author: 'Steven Moss',
       url: 'https://www.bobbybombom.com/',
       likes: 2
@@ -127,7 +125,7 @@ describe('when adding a blog entry', () => {
     await api
       .post('/api/blogs')
       .set('Authorization', `bearer ${token}`)
-      .send(newBlog)
+      .send(testBlog)
       .expect(400) 
     
     const blogsAtEnd = await helper.blogsInDb()
@@ -135,8 +133,7 @@ describe('when adding a blog entry', () => {
   })
 
   test('blog without url is not added', async () => {
-    // Blog without url
-    const newBlog = {
+    const testBlog = {
       title: 'Testiblog E',
       author: 'Vivian Roberts',
       likes: 2
@@ -145,7 +142,7 @@ describe('when adding a blog entry', () => {
     await api
       .post('/api/blogs')
       .set('Authorization', `bearer ${token}`)
-      .send(newBlog)
+      .send(testBlog)
       .expect(400)
   
     const blogsAtEnd = await helper.blogsInDb()
@@ -156,7 +153,7 @@ describe('when adding a blog entry', () => {
     const blogsAtStart = await helper.blogsInDb()
     token = ''
 
-    const newBlog = {
+    const testBlog = {
         title: 'Testiblog C',
         author: 'Trisha Roberts',
         url: 'https://www.sammycomcom.com/',
@@ -166,7 +163,7 @@ describe('when adding a blog entry', () => {
     await api
       .post('/api/blogs')
       .set('Authorization', `Bearer ${token}`)
-      .send(newBlog)
+      .send(testBlog)
       .expect(401)
       .expect('Content-Type', /application\/json/)
 
@@ -178,44 +175,50 @@ describe('when adding a blog entry', () => {
 // Tehtävä 4.13
 describe('when deleting a blog', () => {
   beforeEach(async () => {
-    await Blog.deleteMany({})
-    await Blog.insertMany(initialBlogs)
-
     const tester = {
       username: 'tester',
       name: 'Test User',
       password: '1234'
     }
 
+    const testBlog = {
+      title: 'Test Blog To Delete',
+      author: 'tester',
+      url: 'https://www.testestesttest.com/',
+      likes: 1000
+  }
+
     await api
       .post('/api/users')
       .send(tester)
 
-    const loggedIn = await api.post('/api/login').send({ username: 'tester', password: '1234' })
-    token = loggedIn.body.token
-    
-    const testBlogToDelete = {
-      title: 'Test blog to delete',
-      author: 'tester'
-    }
+    const loggedIn = await api
+                      .post('/api/login')
+                      .send({
+                        username: 'tester',
+                        password: '1234'
+                      })
 
-    await api 
+    token = loggedIn.body.token
+
+    await api
       .post('/api/blogs')
-      .set('Authorization', `bearer ${token}`)
-      .send(testBlogToDelete)
+      .set('Authorization', `Bearer ${token}`)
+      .send(testBlog)
   })
 
   test('a blog can be deleted', async () => {
     const blogsAtStart = await helper.blogsInDb()
-    const blogToDelete = blogsAtStart[0]
-  
-    await api 
-      .delete(`/api/blogs/${blogToDelete.id}`)
+    const blogToDelete = blogsAtStart.filter(blog => blog.title === 'Test Blog To Delete')
+    const blogId = blogToDelete.map(blog => blog.id)
+
+      await api 
+      .delete(`/api/blogs/${blogId}`)
       .set('Authorization', `bearer ${token}`)
       .expect(204)
-  
+    
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
   
     const blogTitles = blogsAtEnd.map(blog => blog.title)
     expect(blogTitles).not.toContain(blogToDelete.title)
@@ -263,7 +266,6 @@ describe('when updating a blog', () => {
     const blogLikes = blogsAtEnd.map(blog => blog.likes)
 
     expect(blogLikes).toContain(updatedBlog.likes)
-    // console.log('when updating a blog', blogsAtEnd)
   })
 })
 
