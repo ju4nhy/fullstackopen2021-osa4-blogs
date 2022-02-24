@@ -36,8 +36,8 @@ blogRouter.post('/', middleware.userExtractor, async (request, response, next) =
       user: user._id
   })
 
-  if ( !blog.title || !blog.url ) {
-    return response.status( 400 ).json({ error: 'Blog title or url is missing' });
+  if ( !blog.title || !blog.author || !blog.url ) {
+    return response.status( 400 ).json({ error: 'Blog title or author or url is missing' });
   }
 
   const savedBlog = await blog.save()

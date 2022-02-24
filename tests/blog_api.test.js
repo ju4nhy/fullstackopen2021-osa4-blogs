@@ -186,7 +186,7 @@ describe('when deleting a blog', () => {
       author: 'tester',
       url: 'https://www.testestesttest.com/',
       likes: 1000
-  }
+    }
 
     await api
       .post('/api/users')
